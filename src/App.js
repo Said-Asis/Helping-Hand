@@ -1,10 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 import MyButton from './componentes/button/boton';
+import Login from './componentes/Login';
 
 function App() {
   return (
-    <MyButton></MyButton>
+    <Login/>
  
   );
 }
