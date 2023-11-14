@@ -1,20 +1,26 @@
 import * as React from 'react';
-import { Button, CssBaseline, TextField, Grid, Box, Typography, Container, Link }  from '@mui/material';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from "react";
-import {useAuth} from "../context/authContext";
+import {useAuth} from "../context/authContext"
 import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
-export default function Login() {
+export default function Register() {
 
     const [user, setUser] = useState({
         email: '',
         password:'',
     });
 
-    const {login, loginWithGoogle, loginWithGithub} = useAuth ()
+    const {signup} = useAuth ()
     const navigate = useNavigate()
     const [error, setError] = useState();
 
@@ -25,42 +31,21 @@ export default function Login() {
         e.preventDefault()
         setError ('')
         try {
-            await login(user.email, user.password)
+            await signup(user.email, user.password)
             navigate('/')
         } catch (error) {
             console.log(error.code)
             switch (error.code) {
                 case 'auth/invalid-email':
-                    setError('Correo Incorrecto')
+                    setError('Correo Invalido')
                     break
                 case 'auth/weak-password':
-                    setError('Contraseña Incorrecta')
-                break;
-                case 'auth/invalid-login-credentials':
-                    setError("Usuario Inexistente")
+                    setError('Contraseña Invalida')
                 break;
                 default:
                     setError('Introduzca un email y contraseña')
             }
         }
-    }
-
-    const handleGoogleSignin = async () =>{
-      try {
-        await loginWithGoogle()
-        navigate('/')
-    } catch {
-        setError(error.message)
-    }
-    }
-
-    const handleGithubSignin = async () =>{
-      try {
-        await loginWithGithub()
-        navigate('/')
-    } catch {
-        setError(error.message)
-    }
     }
   
   return (
@@ -76,7 +61,7 @@ export default function Login() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Iniciar Sesion
+            Crear Usuario
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
             <TextField
@@ -101,35 +86,24 @@ export default function Login() {
               autoComplete="current-contraseña"
               onChange={handleChange}
             />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="contraseña2"
+              label="Confirmar Contraseña"
+              type="contraseña2"
+              id="contraseña2"
+              autoComplete="current-contraseña"
+            />
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Iniciar Sesion
-            </Button>
-
-            <Link href="/register" variant="body2">
-                  {"¿No tienes usuario? ¡Registrate Aqui!"}
-                </Link>
-
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleGoogleSignin}
-            >
-              Goomgle
-            </Button>
-
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleGithubSignin}
-            >
-              Github
+              Registrarse
             </Button>
 
             <Box sx={{
